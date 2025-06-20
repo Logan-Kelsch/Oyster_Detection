@@ -1,0 +1,50 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shellfish YOLO — Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; }
+    h1 { margin-bottom: 1rem; }
+    .card { border: 1px solid #ddd; border-radius: 6px; padding: 1rem; margin-bottom: 1rem; }
+    .card button, .card input[type="file"] { margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Shellfish Detection Dashboard</h1>
+
+  <!-- Image Upload -->
+  <div class="card">
+    <h2>Upload Image</h2>
+    <form action="/detect_image" method="POST" enctype="multipart/form-data">
+      <input type="file" name="image" accept="image/*" required />
+      <button type="submit">Run YOLO on Image</button>
+    </form>
+  </div>
+
+  <!-- Video Upload -->
+  <div class="card">
+    <h2>Upload Video</h2>
+    <form action="/detect_video" method="POST" enctype="multipart/form-data">
+      <input type="file" name="video" accept="video/*" required />
+      <button type="submit">Run YOLO on Video</button>
+    </form>
+  </div>
+
+  <!-- Livestream -->
+  <div class="card">
+    <h2>Livestream Capture</h2>
+    <p>Connect your camera and click below to start live detection.</p>
+    <button id="start-stream">Start Livestream YOLO</button>
+  </div>
+
+  <script>
+    document.getElementById('start-stream').addEventListener('click', () => {
+      // This could open a WebSocket or redirect to a streaming page
+      window.location.href = '/livestream';
+    });
+  </script>
+</body>
+</html>
