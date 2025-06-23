@@ -1,5 +1,6 @@
 import os
-#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress info messages
+
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress info messages
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Disable oneDNN (optional)
 
 import tensorflow as tf
@@ -21,12 +22,14 @@ print("---------------------------------")
 print("Running TensorFlow version: " + tf.__version__)
 print("---------------------------------")
 
+
 def search_dir(parent):
     p = Path(parent)
     files = []
     for ext in ['*.png', '*.jpg', '*.jpeg']:
         files.extend(p.rglob(ext))
     return [str(f) for f in files]
+
 
 fish1_path = "species_1/sample"
 fish2_path = "species_2/sample"
@@ -40,18 +43,21 @@ fish3_images = search_dir(fish3_path)
 fish4_images = search_dir(fish4_path)
 fish5_images = search_dir(fish5_path)
 
+
 def combine_data(full_image_list, full_label_list, new_img_list, new_label):
     for file in new_img_list:
-        img = Image.open(file).resize((128,128))
+        img = Image.open(file).resize((128, 128))
         img_arr = np.asarray(img)
         full_image_list.append(img_arr)
         full_label_list.append(new_label)
     return full_image_list, full_label_list
 
+
 def unison_shuffled_copies(I, L):
     assert len(I) == len(L)
     p = np.random.permutation(len(I))
     return I[p], L[p]
+
 
 images = []
 labels = []
@@ -61,36 +67,47 @@ images_3, labels_3 = combine_data(images_2, labels_2, fish3_images, 2)
 images_4, labels_4 = combine_data(images_3, labels_3, fish4_images, 3)
 images_5, labels_5 = combine_data(images_4, labels_4, fish5_images, 4)
 
-CATEGORIES = ['Dascyllus reticulatus ', 'Myripristis kuntee ', 'Hemigymnus fasciatus ', 'Neoniphon sammara ', 'Lutjanus fulvus ']
-category_to_index = dict((name,index) for index,name in enumerate(CATEGORIES))
+CATEGORIES = ['Dascyllus reticulatus ', 'Myripristis kuntee ', 'Hemigymnus fasciatus ', 'Neoniphon sammara ',
+              'Lutjanus fulvus ']
+category_to_index = dict((name, index) for index, name in enumerate(CATEGORIES))
 category_to_index
 
 fish_dataset = np.array(images_5)
 label_dataset = np.array(labels_5)
 
 fish_dataset, label_dataset = unison_shuffled_copies(fish_dataset, label_dataset)
-split = int(len(fish_dataset)*.1)
+split = int(len(fish_dataset) * .1)
 
 train_img = np.array(fish_dataset)[split:]
 train_lbl = np.array(label_dataset)[split:]
-test_img  = np.array(fish_dataset)[0:split]
-test_lbl  = np.array(label_dataset)[0:split]
+test_img = np.array(fish_dataset)[0:split]
+test_lbl = np.array(label_dataset)[0:split]
+
 
 def display_images(images, labels):
-    plt.figure(figsize=(15,15))
+    plt.figure(figsize=(15, 15))
     grid_size = min(16, len(images))
     for i in range(grid_size):
-        plt.subplot(4, 4, i+1)
+        plt.subplot(4, 4, i + 1)
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
         plt.imshow(images[i], cmap=plt.cm.binary)
         plt.xlabel(CATEGORIES[labels[i]])
 
-#display_images(train_img, train_lbl)
-#plt.show()
 
-subtitle = 112
+# display_images(train_img, train_lbl)
+# plt.show()
+
+# subtitle = 112
+
+
+# Add this diagnostic print BEFORE trying to access images[subtitle]
+print(f"Total images in dataset: {len(images)}")
+
+# Make subtitle index dynamic
+subtitle = min(112, len(images) - 1)  # Ensures index is always valid
+
 plt.figure()
 plt.imshow(images[subtitle], cmap=plt.cm.binary)
 plt.colorbar()
@@ -99,27 +116,27 @@ plt.xlabel(CATEGORIES[labels[subtitle]])
 CNN_model = keras.Sequential([
 
     keras.layers.Conv2D(filters=32, kernel_size=3, padding='same',
-    activation='relu', input_shape=(128,128,3)),
-    (keras.layers.MaxPooling2D(pool_size=(2,2))),
+                        activation='relu', input_shape=(128, 128, 3)),
+    (keras.layers.MaxPooling2D(pool_size=(2, 2))),
     (tf.keras.layers.Dropout(0.3)),
 
-    (keras.layers.Conv2D(filters=64, kernel_size=(3,3), padding='same',
-    activation=tf.nn.relu)),
-    (keras.layers.MaxPooling2D(pool_size=(2,2))),
+    (keras.layers.Conv2D(filters=64, kernel_size=(3, 3), padding='same',
+                         activation=tf.nn.relu)),
+    (keras.layers.MaxPooling2D(pool_size=(2, 2))),
     (keras.layers.Dropout(0.5)),
 
-    (keras.layers.Conv2D(filters=64, kernel_size=(3,3), padding='same',
-    activation=tf.nn.relu)), 
-    (keras.layers.MaxPooling2D(pool_size=(2,2))),
+    (keras.layers.Conv2D(filters=64, kernel_size=(3, 3), padding='same',
+                         activation=tf.nn.relu)),
+    (keras.layers.MaxPooling2D(pool_size=(2, 2))),
     (keras.layers.Dropout(0.5)),
 
-    (keras.layers.Conv2D(filters=128, kernel_size=(3,3), padding='same',
-    activation=tf.nn.relu)),
-    (keras.layers.MaxPooling2D(pool_size=(2,2))),
+    (keras.layers.Conv2D(filters=128, kernel_size=(3, 3), padding='same',
+                         activation=tf.nn.relu)),
+    (keras.layers.MaxPooling2D(pool_size=(2, 2))),
     (keras.layers.Dropout(0.5)),
 
     (keras.layers.Flatten()),
-    (keras.layers.Dense(128,activation=tf.nn.relu)),
+    (keras.layers.Dense(128, activation=tf.nn.relu)),
     (tf.keras.layers.Dropout(0.5)),
     keras.layers.Dense(64, activation='relu'),
     (tf.keras.layers.Dropout(0.25)),
@@ -127,12 +144,12 @@ CNN_model = keras.Sequential([
     (keras.layers.Dense(5, activation=tf.nn.softmax))])
 
 CNN_model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-history = CNN_model.fit(train_img,train_lbl, validation_split=0.10, shuffle=True, epochs=10)
+history = CNN_model.fit(train_img, train_lbl, validation_split=0.10, shuffle=True, epochs=10)
 plt.style.use('dark_background')
 
-#Plot training & validation accuracy values
+# Plot training & validation accuracy values
 
-plt.plot(history.history['accuracy'],'r--',history.history['val_accuracy'],'b--')
+plt.plot(history.history['accuracy'], 'r--', history.history['val_accuracy'], 'b--')
 plt.title('Model accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
@@ -141,7 +158,7 @@ plt.legend(['Train', 'Test'], loc='upper left')
 plt.grid()
 plt.show()
 
-#Plot training & validation loss values
+# Plot training & validation loss values
 
 plt.plot(history.history['loss'], 'r--', history.history['val_loss'], 'b--')
 plt.title('Model loss')
@@ -149,18 +166,20 @@ plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper right')
 plt.grid()
-#plt.show()
-CNN_model.evaluate(test_img, test_lbl, batch_size = 1, verbose = 1)
+# plt.show()
+CNN_model.evaluate(test_img, test_lbl, batch_size=1, verbose=1)
 
-def make_labels( new_img_list, new_label):
+
+def make_labels(new_img_list, new_label):
     images = []
     labels = []
     for file in new_img_list:
-        img = Image.open(file).resize((128,128))
+        img = Image.open(file).resize((128, 128))
         img_arr = np.asarray(img)
         images.append(img_arr)
         labels.append(new_label)
     return images, labels
+
 
 test1_path = "species_1/test"
 test2_path = "species_2/test"
@@ -184,16 +203,19 @@ images_test5, labels_test5 = make_labels(test5_images, 4)
 
 import statistics
 from statistics import mode
-def disp_full_img (path):
+
+
+def disp_full_img(path):
     full_img = Image.open(path)
-    img_arr=np.asarray(full_img)
-    plt.figure(figsize=(10,10))
+    img_arr = np.asarray(full_img)
+    plt.figure(figsize=(10, 10))
     grid_size = 25
 
     plt.xticks([])
     plt.yticks([])
     plt.grid(False)
     plt.imshow(img_arr, cmap=plt.cm.binary)
+
 
 def plot_image(i, predictions_array, true_label, img):
     predictions_array, true_label, img = predictions_array[i], true_label[i], img[i]
@@ -209,23 +231,25 @@ def plot_image(i, predictions_array, true_label, img):
         color = 'red'
 
     plt.xlabel("{} {:2.0f}%\n ({})".format(CATEGORIES[predicted_label],
-        100*np.max(predictions_array),
-        CATEGORIES[true_label]), color=color)
-    
+                                           100 * np.max(predictions_array),
+                                           CATEGORIES[true_label]), color=color)
+
+
 def species_list(predictions_array, answers):
     print("Predictions:      Actual:")
-    picture=0
-    for picture in range (0, len(predictions_array)):
+    picture = 0
+    for picture in range(0, len(predictions_array)):
         img_guess_num = np.argmax(predictions_array[picture])
         img_guess_name = CATEGORIES[img_guess_num]
         print(img_guess_name, "     ", answers)
         picture + 1
 
+
 def species_guess(predictions_array):
     results = []
     img_guess_num = np.argmax(predictions_array)
     picture = 0
-    for picture in range (0, len(predictions_array)):
+    for picture in range(0, len(predictions_array)):
         img_guess_num = np.argmax(predictions_array[picture])
         results.append(img_guess_num)
         picture + 1
@@ -233,19 +257,24 @@ def species_guess(predictions_array):
     return CATEGORIES[final_guess]
 
 
-#plt.style.use('classic')
+# plt.style.use('classic')
 test_set = np.array(images_test5)
 test_labels = np.array(labels_test5)
 predictions = CNN_model.predict(test_set)
 
-num_rows = 5
-num_cols = 6
-num_images = num_rows*num_cols
-#plt.figure(figsize=(2*2*num_cols, 2*num_rows))
-#for i in range(num_images):
-#    plt.subplot(num_rows, 2*num_cols, 2*i+1)
-#    plot_image(i, predictions, test_labels, test_set)
-#plt.show()
+total_test_images = len(test_set)
+print(f"Total test images available: {total_test_images}")
+
+# Dynamically calculate grid size
+num_cols = 5
+num_rows = min(5, math.ceil(total_test_images / num_cols))
+num_images = min(num_rows * num_cols, total_test_images)
+
+plt.figure(figsize=(2 * 2 * num_cols, 2 * num_rows))
+for i in range(num_images):
+    plt.subplot(num_rows, 2 * num_cols, 2 * i + 1)
+    plot_image(i, predictions, test_labels, test_set)
+plt.show()
 
 
 

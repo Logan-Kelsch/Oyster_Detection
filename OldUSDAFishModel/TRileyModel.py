@@ -147,6 +147,7 @@ CNN_model.compile(optimizer='adam',
 history=CNN_model.fit(train_img,train_lbl,validation_split=0.10,
         shuffle=True,epochs =50)
 plt.style.use('dark_background')
+
 # Plot training & validation accuracy values
 plt.plot(history.history['accuracy'],'r--',
         history.history['val_accuracy'],'b--')
