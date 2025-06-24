@@ -61,7 +61,6 @@ def detect_video():
 
 @app.route('/livestream')
 def livestream_page():
-    # You could render a template with a <img src="/video_feed">
     return render_template('livestream.html')
 
 @app.route('/video_feed')

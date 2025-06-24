@@ -1,13 +1,115 @@
-<!-- livestream.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Live Shellfish Detection</title>
+  <title>Live Camera Feed</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    #videoContainer {
+      position: relative;
+      margin: 20px 0;
+    }
+    #liveVideo {
+      max-width: 100%;
+      border-radius: 8px;
+      background: #000;
+    }
+    .controls {
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 0 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      background: #4CAF50;
+      color: white;
+    }
+    #errorMsg {
+      color: red;
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
-  <h1>Livestream YOLO</h1>
-  <img src="{{ url_for('video_feed') }}" />
-  <p><a href="{{ url_for('dashboard') }}">← Back</a></p>
+  <h1>Live Camera Feed</h1>
+  <div id="videoContainer">
+    <video id="liveVideo" autoplay playsinline></video>
+  </div>
+
+  <div class="controls">
+    <button id="startBtn">Start Camera</button>
+    <button id="stopBtn" disabled>Stop Camera</button>
+  </div>
+
+  <div id="errorMsg"></div>
+  <p><a href="{{ url_for('dashboard') }}">← Back to Dashboard</a></p>
+
+  <script>
+    const video = document.getElementById('liveVideo');
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
+    let stream = null;
+
+    // Request camera access and start stream
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: 'environment' // Use rear camera if available
+          },
+          audio: false
+        });
+
+        video.srcObject = stream;
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
+        errorMsg.textContent = '';
+
+        // Adjust video size after metadata loads
+        video.onloadedmetadata = () => {
+          video.width = video.videoWidth;
+          video.height = video.videoHeight;
+        };
+      } catch (err) {
+        console.error('Camera error:', err);
+        errorMsg.textContent = `Error accessing camera: ${err.name}`;
+
+        if (err.name === 'NotAllowedError') {
+          errorMsg.textContent += ' - Please allow camera access in your browser settings';
+        }
+      }
+    }
+
+    // Stop the camera stream
+    function stopCamera() {
+      if (stream) {
+        const tracks = stream.getTracks();
+        tracks.forEach(track => track.stop());
+        video.srcObject = null;
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+      }
+    }
+
+    // Event listeners
+    startBtn.addEventListener('click', startCamera);
+    stopBtn.addEventListener('click', stopCamera);
+
+    // Clean up when leaving page
+    window.addEventListener('beforeunload', stopCamera);
+  </script>
 </body>
 </html>
