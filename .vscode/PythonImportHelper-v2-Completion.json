@@ -1,0 +1,525 @@
+[
+    {
+        "label": "yaml",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "yaml",
+        "description": "yaml",
+        "detail": "yaml",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "glob",
+        "importPath": "glob",
+        "description": "glob",
+        "isExtraImport": true,
+        "detail": "glob",
+        "documentation": {}
+    },
+    {
+        "label": "torch",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
+        "documentation": {}
+    },
+    {
+        "label": "display",
+        "importPath": "IPython",
+        "description": "IPython",
+        "isExtraImport": true,
+        "detail": "IPython",
+        "documentation": {}
+    },
+    {
+        "label": "display",
+        "importPath": "IPython.display",
+        "description": "IPython.display",
+        "isExtraImport": true,
+        "detail": "IPython.display",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "IPython.display",
+        "description": "IPython.display",
+        "isExtraImport": true,
+        "detail": "IPython.display",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "Roboflow",
+        "importPath": "roboflow",
+        "description": "roboflow",
+        "isExtraImport": true,
+        "detail": "roboflow",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "Flask",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "render_template",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "request",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "redirect",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "url_for",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "send_file",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "Response",
+        "importPath": "flask",
+        "description": "flask",
+        "isExtraImport": true,
+        "detail": "flask",
+        "documentation": {}
+    },
+    {
+        "label": "secure_filename",
+        "importPath": "werkzeug.utils",
+        "description": "werkzeug.utils",
+        "isExtraImport": true,
+        "detail": "werkzeug.utils",
+        "documentation": {}
+    },
+    {
+        "label": "anno_img",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "anno_img",
+        "description": "anno_img",
+        "detail": "anno_img",
+        "documentation": {}
+    },
+    {
+        "label": "anno_vid",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "anno_vid",
+        "description": "anno_vid",
+        "detail": "anno_vid",
+        "documentation": {}
+    },
+    {
+        "label": "anno_liv",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "anno_liv",
+        "description": "anno_liv",
+        "detail": "anno_liv",
+        "documentation": {}
+    },
+    {
+        "label": "yaml_path",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTest",
+        "description": "YoloTesting.OysterResearchTest",
+        "peekOfCode": "yaml_path = os.path.join(dataset.location, \"data.yaml\")\n# Load class names from YAML\nwith open(yaml_path, \"r\") as f:\n    data_yaml = yaml.safe_load(f)\nclass_names = data_yaml['names']\nnum_classes = len(class_names)\n# Set test label directory\nlabel_dir = os.path.join(dataset.location, \"test/labels\")\nlabel_files = glob(os.path.join(label_dir, \"*.txt\"))\n# Count instances per class",
+        "detail": "YoloTesting.OysterResearchTest",
+        "documentation": {}
+    },
+    {
+        "label": "class_names",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTest",
+        "description": "YoloTesting.OysterResearchTest",
+        "peekOfCode": "class_names = data_yaml['names']\nnum_classes = len(class_names)\n# Set test label directory\nlabel_dir = os.path.join(dataset.location, \"test/labels\")\nlabel_files = glob(os.path.join(label_dir, \"*.txt\"))\n# Count instances per class\nclass_counts = [0] * num_classes\nfor label_file in label_files:\n    with open(label_file, \"r\") as f:\n        for line in f:",
+        "detail": "YoloTesting.OysterResearchTest",
+        "documentation": {}
+    },
+    {
+        "label": "num_classes",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTest",
+        "description": "YoloTesting.OysterResearchTest",
+        "peekOfCode": "num_classes = len(class_names)\n# Set test label directory\nlabel_dir = os.path.join(dataset.location, \"test/labels\")\nlabel_files = glob(os.path.join(label_dir, \"*.txt\"))\n# Count instances per class\nclass_counts = [0] * num_classes\nfor label_file in label_files:\n    with open(label_file, \"r\") as f:\n        for line in f:\n            if line.strip():",
+        "detail": "YoloTesting.OysterResearchTest",
+        "documentation": {}
+    },
+    {
+        "label": "label_dir",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTest",
+        "description": "YoloTesting.OysterResearchTest",
+        "peekOfCode": "label_dir = os.path.join(dataset.location, \"test/labels\")\nlabel_files = glob(os.path.join(label_dir, \"*.txt\"))\n# Count instances per class\nclass_counts = [0] * num_classes\nfor label_file in label_files:\n    with open(label_file, \"r\") as f:\n        for line in f:\n            if line.strip():\n                class_id = int(line.split()[0])\n                if 0 <= class_id < num_classes:",
+        "detail": "YoloTesting.OysterResearchTest",
+        "documentation": {}
+    },
+    {
+        "label": "label_files",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTest",
+        "description": "YoloTesting.OysterResearchTest",
+        "peekOfCode": "label_files = glob(os.path.join(label_dir, \"*.txt\"))\n# Count instances per class\nclass_counts = [0] * num_classes\nfor label_file in label_files:\n    with open(label_file, \"r\") as f:\n        for line in f:\n            if line.strip():\n                class_id = int(line.split()[0])\n                if 0 <= class_id < num_classes:\n                    class_counts[class_id] += 1",
+        "detail": "YoloTesting.OysterResearchTest",
+        "documentation": {}
+    },
+    {
+        "label": "class_counts",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTest",
+        "description": "YoloTesting.OysterResearchTest",
+        "peekOfCode": "class_counts = [0] * num_classes\nfor label_file in label_files:\n    with open(label_file, \"r\") as f:\n        for line in f:\n            if line.strip():\n                class_id = int(line.split()[0])\n                if 0 <= class_id < num_classes:\n                    class_counts[class_id] += 1\n# Print results\nprint(\"📊 Class Distribution in Test Set:\")",
+        "detail": "YoloTesting.OysterResearchTest",
+        "documentation": {}
+    },
+    {
+        "label": "HOME",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTrain",
+        "description": "YoloTesting.OysterResearchTrain",
+        "peekOfCode": "HOME =  os.getcwd()\nprint(HOME)\n#train many smaller models:\n#this was trained on a RTX 4080.\n#I trained one model at a time over the course of several hours, you may train multiple\n#in a row if you have the time and watch a computer for a long time\nprint(f\"Allocated Memory: {torch.cuda.memory_allocated() / 1024 / 1024:.2f} MB\")\nmodels = [\"yolov8m.pt\"] #\"yolov8n.pt\",\n#image size is 960 for everything except medium, for gpu mem alloc issues\nfor m in models:",
+        "detail": "YoloTesting.OysterResearchTrain",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchTrain",
+        "description": "YoloTesting.OysterResearchTrain",
+        "peekOfCode": "models = [\"yolov8m.pt\"] #\"yolov8n.pt\",\n#image size is 960 for everything except medium, for gpu mem alloc issues\nfor m in models:\n    model = YOLO(m)\n    model.train(\n        data=dataset.location + \"/data.yaml\",\n        epochs=200,\n        imgsz=640,\n        batch=16,\n        patience=20,",
+        "detail": "YoloTesting.OysterResearchTrain",
+        "documentation": {}
+    },
+    {
+        "label": "model_paths",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "model_paths = [\n    \"oysterTrainedModels/model_yolov8m/weights/best.pt\",\n    \"oysterTrainedModels/model_yolov8s/weights/best.pt\",\n    \"oysterTrainedModels/model_yolov8n/weights/best.pt\"\n]\n# Location of your data.yaml file\n# Swap as needed, full path as was just copied/pasted from file explorer\ndata_yaml = \"/mnt/linuxlab/home/ncorcoran1/Oyster_Orientation_Model/REU_Oyster_2024_Improved-2/data.yaml\"\nresults_list = []\ncount = 0",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "data_yaml",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "data_yaml = \"/mnt/linuxlab/home/ncorcoran1/Oyster_Orientation_Model/REU_Oyster_2024_Improved-2/data.yaml\"\nresults_list = []\ncount = 0\nnames = [\"YOLOv8m\", \"YOLOv8s\", \"YOLOv8n\"]\nfor path in model_paths:\n    print(f\"Validating model: {path}\")\n    model = YOLO(path)\n    results = model.val(data=data_yaml, save=False)\n    results_list.append({\n        \"Run Name\": names[count],",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "results_list",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "results_list = []\ncount = 0\nnames = [\"YOLOv8m\", \"YOLOv8s\", \"YOLOv8n\"]\nfor path in model_paths:\n    print(f\"Validating model: {path}\")\n    model = YOLO(path)\n    results = model.val(data=data_yaml, save=False)\n    results_list.append({\n        \"Run Name\": names[count],\n        \"Precision\": round(results.box.p.mean().item(), 3),",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "count",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "count = 0\nnames = [\"YOLOv8m\", \"YOLOv8s\", \"YOLOv8n\"]\nfor path in model_paths:\n    print(f\"Validating model: {path}\")\n    model = YOLO(path)\n    results = model.val(data=data_yaml, save=False)\n    results_list.append({\n        \"Run Name\": names[count],\n        \"Precision\": round(results.box.p.mean().item(), 3),\n        \"Recall\": round(results.box.r.mean().item(), 3),",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "names",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "names = [\"YOLOv8m\", \"YOLOv8s\", \"YOLOv8n\"]\nfor path in model_paths:\n    print(f\"Validating model: {path}\")\n    model = YOLO(path)\n    results = model.val(data=data_yaml, save=False)\n    results_list.append({\n        \"Run Name\": names[count],\n        \"Precision\": round(results.box.p.mean().item(), 3),\n        \"Recall\": round(results.box.r.mean().item(), 3),\n        \"mAP@0.5\": round(results.box.map50.mean().item(), 3),",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "df = pd.DataFrame(results_list)\ndf_sorted = df.sort_values(by=\"mAP@0.5\", ascending=False).reset_index(drop=True)\nprint(\"\\n📊 Model Comparison:\")\nprint(df_sorted)",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "df_sorted",
+        "kind": 5,
+        "importPath": "YoloTesting.OysterResearchValidate",
+        "description": "YoloTesting.OysterResearchValidate",
+        "peekOfCode": "df_sorted = df.sort_values(by=\"mAP@0.5\", ascending=False).reset_index(drop=True)\nprint(\"\\n📊 Model Comparison:\")\nprint(df_sorted)",
+        "detail": "YoloTesting.OysterResearchValidate",
+        "documentation": {}
+    },
+    {
+        "label": "model2",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloDetect",
+        "description": "YoloTesting.YoloDetect",
+        "peekOfCode": "model2 = YOLO(\"runs/detect/train3/weights/best.pt\")\n#run inference with model on an image\nresults = model2(\"dogsInPark.jpg\", save=True, show=True)",
+        "detail": "YoloTesting.YoloDetect",
+        "documentation": {}
+    },
+    {
+        "label": "results",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloDetect",
+        "description": "YoloTesting.YoloDetect",
+        "peekOfCode": "results = model2(\"dogsInPark.jpg\", save=True, show=True)",
+        "detail": "YoloTesting.YoloDetect",
+        "documentation": {}
+    },
+    {
+        "label": "model",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloTrain",
+        "description": "YoloTesting.YoloTrain",
+        "peekOfCode": "model = YOLO(\"models/yolo11n.pt\")\n#Train the model\n#image size is 960 for everything except medium, for gpu mem alloc issues\nresults = model.train(\n    data=\"REU_Oyster_2024_Improved-2/data.yaml\",\n    epochs=200,\n    imgsz=960,\n    batch=16,\n    patience=20,\n    amp=True,",
+        "detail": "YoloTesting.YoloTrain",
+        "documentation": {}
+    },
+    {
+        "label": "results",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloTrain",
+        "description": "YoloTesting.YoloTrain",
+        "peekOfCode": "results = model.train(\n    data=\"REU_Oyster_2024_Improved-2/data.yaml\",\n    epochs=200,\n    imgsz=960,\n    batch=16,\n    patience=20,\n    amp=True,\n    optimize=True,  # amp=True, cache=False\n    project=\"oysterTrainedModels\",\n    exist_ok=True",
+        "detail": "YoloTesting.YoloTrain",
+        "documentation": {}
+    },
+    {
+        "label": "run",
+        "kind": 2,
+        "importPath": "anno_img",
+        "description": "anno_img",
+        "peekOfCode": "def run(input_path: str, output_path: str) -> str:\n    img = cv2.imread(input_path)\n    # … do your detection & draw boxes …\n    cv2.imwrite(output_path, img)\n    return output_path\nif __name__ == \"__main__\":\n    import sys\n    in_p, out_p = sys.argv[1], sys.argv[2]\n    run(in_p, out_p)",
+        "detail": "anno_img",
+        "documentation": {}
+    },
+    {
+        "label": "frame_generator",
+        "kind": 2,
+        "importPath": "anno_liv",
+        "description": "anno_liv",
+        "peekOfCode": "def frame_generator():\n    cap = cv2.VideoCapture(0)\n    while True:\n        ret, frame = cap.read()\n        # … detect & annotate on frame …\n        _, jpeg = cv2.imencode('.jpg', frame)\n        yield jpeg.tobytes()\n    cap.release()",
+        "detail": "anno_liv",
+        "documentation": {}
+    },
+    {
+        "label": "run",
+        "kind": 2,
+        "importPath": "anno_vid",
+        "description": "anno_vid",
+        "peekOfCode": "def run(input_path: str, output_path: str) -> str:\n    \"\"\"\n    Reads a video from `input_path`, applies YOLO-based annotations frame by frame,\n    and writes the result to `output_path`.\n    \"\"\"\n    # Open input video\n    cap = cv2.VideoCapture(input_path)\n    if not cap.isOpened():\n        raise IOError(f\"Cannot open video file {input_path}\")\n    # Gather input video properties",
+        "detail": "anno_vid",
+        "documentation": {}
+    },
+    {
+        "label": "root",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def root():\n    return redirect(url_for('login'))\n@app.route('/login')\ndef login():\n    return render_template('login.html')\n@app.route('/index.html')\ndef dashboard():\n    return render_template('index.html')\n@app.route('/detect_image', methods=['POST'])\ndef detect_image():",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "login",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def login():\n    return render_template('login.html')\n@app.route('/index.html')\ndef dashboard():\n    return render_template('index.html')\n@app.route('/detect_image', methods=['POST'])\ndef detect_image():\n    f = request.files['image']\n    filename = secure_filename(f.filename)\n    in_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "dashboard",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def dashboard():\n    return render_template('index.html')\n@app.route('/detect_image', methods=['POST'])\ndef detect_image():\n    f = request.files['image']\n    filename = secure_filename(f.filename)\n    in_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)\n    out_path = os.path.join(app.config['OUTPUT_FOLDER'], 'anno_'+filename)\n    f.save(in_path)\n    # call your script’s function",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "detect_image",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def detect_image():\n    f = request.files['image']\n    filename = secure_filename(f.filename)\n    in_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)\n    out_path = os.path.join(app.config['OUTPUT_FOLDER'], 'anno_'+filename)\n    f.save(in_path)\n    # call your script’s function\n    anno_img.run(in_path, out_path)\n    # return the annotated image\n    return send_file(out_path, mimetype='image/jpeg')",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "detect_video",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def detect_video():\n    f = request.files['video']\n    filename = secure_filename(f.filename)\n    in_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)\n    out_path = os.path.join(app.config['OUTPUT_FOLDER'], 'anno_'+filename)\n    f.save(in_path)\n    # call your video annotation\n    anno_vid.run(in_path, out_path)\n    # send back the processed video\n    return send_file(out_path, mimetype='video/mp4')",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "livestream_page",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def livestream_page():\n    return render_template('livestream.html')\n@app.route('/video_feed')\ndef video_feed():\n    # uses the generator from anno_liv\n    return Response(\n        anno_liv.frame_generator(),\n        mimetype='multipart/x-mixed-replace; boundary=frame'\n    )\nif __name__ == \"__main__\":",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "video_feed",
+        "kind": 2,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "def video_feed():\n    # uses the generator from anno_liv\n    return Response(\n        anno_liv.frame_generator(),\n        mimetype='multipart/x-mixed-replace; boundary=frame'\n    )\nif __name__ == \"__main__\":\n    app.run(debug=True)",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app = Flask(__name__)\nUPLOAD_FOLDER = 'uploads'\nOUTPUT_FOLDER = 'outputs'\nos.makedirs(UPLOAD_FOLDER, exist_ok=True)\nos.makedirs(OUTPUT_FOLDER, exist_ok=True)\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\napp.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER\n@app.route('/')\ndef root():\n    return redirect(url_for('login'))",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "UPLOAD_FOLDER",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "UPLOAD_FOLDER = 'uploads'\nOUTPUT_FOLDER = 'outputs'\nos.makedirs(UPLOAD_FOLDER, exist_ok=True)\nos.makedirs(OUTPUT_FOLDER, exist_ok=True)\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\napp.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER\n@app.route('/')\ndef root():\n    return redirect(url_for('login'))\n@app.route('/login')",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "OUTPUT_FOLDER",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "OUTPUT_FOLDER = 'outputs'\nos.makedirs(UPLOAD_FOLDER, exist_ok=True)\nos.makedirs(OUTPUT_FOLDER, exist_ok=True)\napp.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\napp.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER\n@app.route('/')\ndef root():\n    return redirect(url_for('login'))\n@app.route('/login')\ndef login():",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['UPLOAD_FOLDER']",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER\napp.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER\n@app.route('/')\ndef root():\n    return redirect(url_for('login'))\n@app.route('/login')\ndef login():\n    return render_template('login.html')\n@app.route('/index.html')\ndef dashboard():",
+        "detail": "app",
+        "documentation": {}
+    },
+    {
+        "label": "app.config['OUTPUT_FOLDER']",
+        "kind": 5,
+        "importPath": "app",
+        "description": "app",
+        "peekOfCode": "app.config['OUTPUT_FOLDER'] = OUTPUT_FOLDER\n@app.route('/')\ndef root():\n    return redirect(url_for('login'))\n@app.route('/login')\ndef login():\n    return render_template('login.html')\n@app.route('/index.html')\ndef dashboard():\n    return render_template('index.html')",
+        "detail": "app",
+        "documentation": {}
+    }
+]
