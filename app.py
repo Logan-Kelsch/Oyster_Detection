@@ -1,9 +1,14 @@
 # app.py
 import os
+from io import BytesIO
+
+import cv2
+import numpy as np
 from flask import (
     Flask, render_template, request,
     redirect, url_for, send_file, Response
 )
+from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 
 import anno_img
@@ -35,29 +40,37 @@ def dashboard():
 def detect_image():
     f = request.files['image']
     filename = secure_filename(f.filename)
-    in_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    out_path = os.path.join(app.config['OUTPUT_FOLDER'], 'anno_'+filename)
-    f.save(in_path)
 
-    # call your script’s function
-    anno_img.run(in_path, out_path)
+    if not anno_img.is_allowed_file(filename):
+        return "Unsupported file type.", 400
 
-    # return the annotated image
-    return send_file(out_path, mimetype='image/jpeg')
+    ext = filename.rsplit('.', 1)[1].lower()
+    image_bytes = f.read()
+
+    annotated_io, mime_type = anno_img.annotate_image_bytes(image_bytes, ext, conf_threshold=0.75)
+
+
+    return send_file(
+        annotated_io,
+        mimetype=mime_type,
+        as_attachment=True,
+        download_name=f'annotated.{ext}'
+    )
 
 @app.route('/detect_video', methods=['POST'])
 def detect_video():
     f = request.files['video']
-    filename = secure_filename(f.filename)
-    in_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    out_path = os.path.join(app.config['OUTPUT_FOLDER'], 'anno_'+filename)
-    f.save(in_path)
+    video_bytes = f.read()
 
-    # call your video annotation
-    anno_vid.run(in_path, out_path)
+    from anno_vid import annotate_video_bytes
+    annotated_io, mime_type = annotate_video_bytes(video_bytes)
 
-    # send back the processed video
-    return send_file(out_path, mimetype='video/mp4')
+    return send_file(
+        annotated_io,
+        mimetype=mime_type,
+        as_attachment=True,
+        download_name='annotated_video.mp4'
+    )
 
 @app.route('/livestream')
 def livestream_page():

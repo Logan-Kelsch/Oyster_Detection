@@ -1,58 +1,59 @@
 # anno_vid.py
 
-import sys
 import cv2
+import os
+import numpy as np
+from ultralytics import YOLO
+from io import BytesIO
+import tempfile
 
-def run(input_path: str, output_path: str) -> str:
+model = YOLO('active_model/best.pt')  # load once
+
+def annotate_video_bytes(video_bytes: bytes, output_format='mp4') -> tuple[BytesIO, str]:
     """
-    Reads a video from `input_path`, applies YOLO-based annotations frame by frame,
-    and writes the result to `output_path`.
+    Annotate a video (raw bytes) with YOLO and return a BytesIO stream + mime type.
     """
-    # Open input video
-    cap = cv2.VideoCapture(input_path)
+    # 1️⃣ Write input bytes to a temp file
+    fd_in, path_in = tempfile.mkstemp(suffix='.mp4')
+    os.close(fd_in)
+    with open(path_in, 'wb') as f:
+        f.write(video_bytes)
+
+    # 2️⃣ Open with OpenCV
+    cap = cv2.VideoCapture(path_in)
     if not cap.isOpened():
-        raise IOError(f"Cannot open video file {input_path}")
+        os.remove(path_in)
+        raise IOError("Could not open video from memory buffer")
 
-    # Gather input video properties
     fps    = cap.get(cv2.CAP_PROP_FPS)
     width  = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-    # Prepare output writer (MP4)
+    # 3️⃣ Prepare temp output file
+    fd_out, path_out = tempfile.mkstemp(suffix=f'.{output_format}')
+    os.close(fd_out)
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    writer = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+    writer = cv2.VideoWriter(path_out, fourcc, fps, (width, height))
 
+    # 4️⃣ Process frames
     while True:
         ret, frame = cap.read()
         if not ret:
             break
 
-        # ===== YOLO ANNOTATION PLACEHOLDER =====
-        # Here you would run your model on `frame` and draw boxes, e.g.:
-        # detections = yolo_model.detect(frame)
-        # for det in detections:
-        #     x1, y1, x2, y2, label, conf = det
-        #     cv2.rectangle(frame, (x1, y1), (x2, y2), (0,255,0), 2)
-        #     cv2.putText(frame, f"{label} {conf:.2f}", (x1, y1-10),
-        #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2)
-        # ========================================
-
-        # For now, just pass the unmodified frame through:
-        annotated_frame = frame
-
+        results = model(frame)
+        annotated_frame = results[0].plot()
         writer.write(annotated_frame)
 
-    # Clean up
     cap.release()
     writer.release()
 
-    return output_path
+    # 5️⃣ Read output back into memory
+    with open(path_out, 'rb') as f:
+        annotated_bytes = f.read()
 
-if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python anno_vid.py <input_video_path> <output_video_path>")
-        sys.exit(1)
+    # 6️⃣ Cleanup temp files
+    os.remove(path_in)
+    os.remove(path_out)
 
-    inp, outp = sys.argv[1], sys.argv[2]
-    result = run(inp, outp)
-    print(f"Annotated video saved to {result}")
+    return BytesIO(annotated_bytes), 'video/mp4'
