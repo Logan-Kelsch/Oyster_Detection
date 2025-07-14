@@ -2,113 +2,593 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <title>Live Camera Feed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time Object Detection</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 20px;
-      text-align: center;
+    :root {
+      --primary-color: #2c3e50;
+      --accent-color: #3498db;
+      --success-color: #2ecc71;
+      --warning-color: #e74c3c;
+      --text-color: #ecf0f1;
     }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+      color: var(--text-color);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px 0;
+      margin-bottom: 30px;
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 25px;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .content {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .video-section {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .panel {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .panel-title {
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent-color);
+    }
+
     #videoContainer {
       position: relative;
-      margin: 20px 0;
-    }
-    #liveVideo {
-      max-width: 100%;
-      border-radius: 8px;
+      display: inline-block;
+      width: 100%;
       background: #000;
+      border-radius: 10px;
+      overflow: hidden;
     }
+
+    #liveVideo, #overlayCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    #overlayCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
     .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
       margin: 20px 0;
+      justify-content: center;
     }
+
     button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 0 10px;
+      padding: 12px 25px;
+      font-size: 1.1rem;
+      font-weight: 600;
       cursor: pointer;
       border: none;
-      border-radius: 4px;
-      background: #4CAF50;
+      border-radius: 50px;
+      background: var(--accent-color);
       color: white;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      background: #7f8c8d;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    #startBtn {
+      background: var(--success-color);
+    }
+
+    #stopBtn {
+      background: var(--warning-color);
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
     #errorMsg {
-      color: red;
+      color: var(--warning-color);
+      text-align: center;
+      padding: 10px;
       margin: 10px 0;
+      background: rgba(231, 76, 60, 0.2);
+      border-radius: 8px;
+      min-height: 40px;
+    }
+
+    .detection-list {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 15px;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .detection-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+    }
+
+    .detection-label {
+      font-weight: bold;
+    }
+
+    .detection-confidence {
+      color: var(--accent-color);
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50px;
+      color: var(--text-color);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-5px);
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 30px;
+      opacity: 0.7;
+      font-size: 0.9rem;
+    }
+
+    .fps-counter {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.9rem;
+      z-index: 10;
     }
   </style>
 </head>
 <body>
-  <h1>Live Camera Feed</h1>
-  <div id="videoContainer">
-    <video id="liveVideo" autoplay playsinline></video>
-  </div>
+  <div class="container">
+    <header>
+      <h1>Real-Time Object Detection</h1>
+      <p class="subtitle">Powered by YOLOv8 - Detecting objects in real-time using your camera</p>
+    </header>
 
-  <div class="controls">
-    <button id="startBtn">Start Camera</button>
-    <button id="stopBtn" disabled>Stop Camera</button>
-  </div>
+    <div class="content">
+      <div class="video-section">
+        <div id="videoContainer">
+          <div class="fps-counter">FPS: <span id="fpsValue">0</span></div>
+          <video id="liveVideo" autoplay playsinline></video>
+          <canvas id="overlayCanvas"></canvas>
+        </div>
 
-  <div id="errorMsg"></div>
-  <p><a href="{{ url_for('dashboard') }}">← Back to Dashboard</a></p>
+        <div class="controls">
+          <button id="startBtn">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
+            </svg>
+            Start Camera
+          </button>
+          <button id="stopBtn" disabled>
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.5 5A1.5 1.5 0 0 0 5 6.5v3A1.5 1.5 0 0 0 6.5 11h3A1.5 1.5 0 0 0 11 9.5v-3A1.5 1.5 0 0 0 9.5 5h-3z"/>
+            </svg>
+            Stop Camera
+          </button>
+        </div>
+
+        <div id="errorMsg"></div>
+
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-value" id="detectionCount">0</div>
+            <div class="stat-label">Objects Detected</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="frameRate">0</div>
+            <div class="stat-label">FPS</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="processingTime">0</div>
+            <div class="stat-label">ms/Frame</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="panel-title">Detection Results</h2>
+        <p>Objects detected in real-time will appear below:</p>
+
+        <div class="detection-list" id="detectionList">
+          <div class="empty-message">No objects detected yet. Start the camera to begin detection.</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-center">
+      <a href="{{ url_for('dashboard') }}" class="back-link">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+        </svg>
+        Back to Dashboard
+      </a>
+    </p>
+
+    <footer>
+      <p>Real-Time Object Detection System &copy; 2023 | Powered by YOLOv8 and Flask</p>
+    </footer>
+  </div>
 
   <script>
+    // DOM Elements
     const video = document.getElementById('liveVideo');
+    const overlay = document.getElementById('overlayCanvas');
     const startBtn = document.getElementById('startBtn');
     const stopBtn = document.getElementById('stopBtn');
     const errorMsg = document.getElementById('errorMsg');
+    const detectionList = document.getElementById('detectionList');
+    const detectionCount = document.getElementById('detectionCount');
+    const fpsValue = document.getElementById('fpsValue');
+    const frameRateEl = document.getElementById('frameRate');
+    const processingTimeEl = document.getElementById('processingTime');
 
+    // Create a canvas for capturing frames
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const overlayCtx = overlay.getContext('2d');
+
+    // State variables
     let stream = null;
+    let animationId = null;
+    let lastTimestamp = 0;
+    let frameCount = 0;
+    let fps = 0;
+    let processingStart = 0;
+    let processingTimes = [];
 
-    // Request camera access and start stream
+    // Camera access and setup
     async function startCamera() {
       try {
+        // Access the camera
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
             width: { ideal: 1280 },
             height: { ideal: 720 },
-            facingMode: 'environment' // Use rear camera if available
+            facingMode: 'environment'
           },
           audio: false
         });
 
+        // Set video source
         video.srcObject = stream;
+        video.muted = true;
+
+        // Enable/disable buttons
         startBtn.disabled = true;
         stopBtn.disabled = false;
         errorMsg.textContent = '';
 
-        // Adjust video size after metadata loads
-        video.onloadedmetadata = () => {
-          video.width = video.videoWidth;
-          video.height = video.videoHeight;
-        };
+        // Wait for video metadata to load
+        await new Promise((resolve) => {
+          video.onloadedmetadata = () => {
+            video.width = video.videoWidth;
+            video.height = video.videoHeight;
+
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            overlay.width = video.videoWidth;
+            overlay.height = video.videoHeight;
+
+            resolve();
+          };
+        });
+
+        // Start processing frames
+        lastTimestamp = performance.now();
+        processFrame();
       } catch (err) {
         console.error('Camera error:', err);
-        errorMsg.textContent = `Error accessing camera: ${err.name}`;
-
-        if (err.name === 'NotAllowedError') {
-          errorMsg.textContent += ' - Please allow camera access in your browser settings';
-        }
+        handleCameraError(err);
       }
     }
 
-    // Stop the camera stream
+    // Handle camera errors
+    function handleCameraError(err) {
+      let message = `Error accessing camera: ${err.name}`;
+
+      if (err.name === 'NotAllowedError') {
+        message += ' - Please allow camera access in your browser settings';
+      } else if (err.name === 'NotFoundError' || err.name === 'OverconstrainedError') {
+        message += ' - Required camera not found';
+      } else if (err.name === 'NotReadableError') {
+        message += ' - Camera is already in use';
+      }
+
+      errorMsg.textContent = message;
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    }
+
+    // Stop camera
     function stopCamera() {
       if (stream) {
-        const tracks = stream.getTracks();
-        tracks.forEach(track => track.stop());
+        stream.getTracks().forEach(track => track.stop());
         video.srcObject = null;
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
       }
+
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+
+      // Reset UI
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+      overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
+      detectionList.innerHTML = '<div class="empty-message">No objects detected. Camera stopped.</div>';
+      detectionCount.textContent = '0';
     }
 
-    // Event listeners
+    // Process each video frame
+    async function processFrame() {
+      const startTime = performance.now();
+
+      // Draw video frame to canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Capture frame as blob and send for detection
+      try {
+        const blob = await new Promise((resolve) => {
+          canvas.toBlob(resolve, 'image/jpeg', 0.85);
+        });
+
+        const formData = new FormData();
+        formData.append('frame', blob, 'frame.jpg');
+
+        // Send frame to server for detection
+        processingStart = performance.now();
+        const response = await fetch('/annotate_frame', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+
+        const detections = await response.json();
+        const processingTime = performance.now() - processingStart;
+
+        // Update UI with detections
+        updateDetections(detections);
+        drawDetections(detections);
+
+        // Update performance metrics
+        updatePerformanceMetrics(processingTime);
+      } catch (err) {
+        console.error('Processing error:', err);
+        errorMsg.textContent = `Detection error: ${err.message}`;
+      }
+
+      // Calculate FPS
+      frameCount++;
+      const now = performance.now();
+      const elapsed = now - lastTimestamp;
+
+      if (elapsed >= 1000) {
+        fps = Math.round((frameCount * 1000) / elapsed);
+        fpsValue.textContent = fps;
+        frameRateEl.textContent = fps;
+        frameCount = 0;
+        lastTimestamp = now;
+      }
+
+      // Continue processing frames
+      animationId = requestAnimationFrame(processFrame);
+    }
+
+    // Update detection list UI
+    function updateDetections(detections) {
+      detectionCount.textContent = detections.length;
+
+      if (detections.length === 0) {
+        detectionList.innerHTML = '<div class="empty-message">No objects detected</div>';
+        return;
+      }
+
+      // Group detections by label and count
+      const detectionGroups = {};
+      detections.forEach(det => {
+        if (!detectionGroups[det.label]) {
+          detectionGroups[det.label] = {
+            count: 0,
+            maxConfidence: 0
+          };
+        }
+        detectionGroups[det.label].count++;
+        if (det.conf > detectionGroups[det.label].maxConfidence) {
+          detectionGroups[det.label].maxConfidence = det.conf;
+        }
+      });
+
+      // Create detection items
+      let html = '';
+      for (const [label, data] of Object.entries(detectionGroups)) {
+        html += `
+          <div class="detection-item">
+            <span class="detection-label">${label}</span>
+            <div>
+              <span class="detection-count">${data.count}x</span>
+              <span class="detection-confidence">${Math.round(data.maxConfidence * 100)}%</span>
+            </div>
+          </div>
+        `;
+      }
+
+      detectionList.innerHTML = html;
+    }
+
+    // Draw detections on canvas overlay
+    function drawDetections(detections) {
+      // Clear previous detections
+      overlayCtx.clearRect(0, 0, overlay.width, overlay.height);
+
+      // Draw each detection
+      detections.forEach(det => {
+        const { x1, y1, x2, y2, label, conf } = det;
+        const width = x2 - x1;
+        const height = y2 - y1;
+
+        // Draw bounding box
+        overlayCtx.strokeStyle = '#00ff00';
+        overlayCtx.lineWidth = 2;
+        overlayCtx.strokeRect(x1, y1, width, height);
+
+        // Draw label background
+        overlayCtx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        const text = `${label} ${Math.round(conf * 100)}%`;
+        const textWidth = overlayCtx.measureText(text).width;
+        overlayCtx.fillRect(x1 - 1, y1 - 20, textWidth + 10, 20);
+
+        // Draw label text
+        overlayCtx.fillStyle = '#ffffff';
+        overlayCtx.font = '14px Arial';
+        overlayCtx.fillText(text, x1 + 4, y1 - 5);
+      });
+    }
+
+    // Update performance metrics
+    function updatePerformanceMetrics(processingTime) {
+      // Add to processing times and keep only last 10
+      processingTimes.push(processingTime);
+      if (processingTimes.length > 10) {
+        processingTimes.shift();
+      }
+
+      // Calculate average
+      const avgProcessingTime = processingTimes.reduce((a, b) => a + b, 0) / processingTimes.length;
+      processingTimeEl.textContent = avgProcessingTime.toFixed(1);
+    }
+
+    // Event Listeners
     startBtn.addEventListener('click', startCamera);
     stopBtn.addEventListener('click', stopCamera);
-
-    // Clean up when leaving page
     window.addEventListener('beforeunload', stopCamera);
   </script>
 </body>

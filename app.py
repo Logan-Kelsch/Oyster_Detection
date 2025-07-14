@@ -1,19 +1,15 @@
 # app.py
 import os
-from io import BytesIO
-
-import cv2
-import numpy as np
 from flask import (
     Flask, render_template, request,
     redirect, url_for, send_file, Response
 )
-from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 
 import anno_img
-import anno_vid
 import anno_liv
+from flask import request, jsonify
+
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -83,6 +79,21 @@ def video_feed():
         anno_liv.frame_generator(),
         mimetype='multipart/x-mixed-replace; boundary=frame'
     )
+
+@app.route("/annotate_frame", methods=["POST"])
+def annotate_frame():
+    frame = request.files.get("frame")
+    if not frame:
+        return "No frame received", 400
+
+    frame_bytes = frame.read()
+    try:
+        from anno_liv import detect_objects_from_bytes
+        detections = detect_objects_from_bytes(frame_bytes)
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+    return jsonify(detections)
 
 if __name__ == "__main__":
     app.run(debug=True)
