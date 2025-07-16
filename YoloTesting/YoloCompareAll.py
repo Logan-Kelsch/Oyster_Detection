@@ -16,6 +16,7 @@ Old Nick used a 640 image resolution for m sized models due to memory constraint
 New Merged and New Nick uses 960 resolution for all models including m sized, but downsizes the batch size
     for m models to alleviate memory.
 
+All models are sorted by the dataset used and mAP@0.5 in ascending order
 """
 
 
