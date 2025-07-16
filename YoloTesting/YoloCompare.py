@@ -2,6 +2,12 @@ from ultralytics import YOLO
 import pandas as pd
 import os
 
+"""
+  Nick's version of model comparison. His setup requires explicit naming of each model with the names = [] variable
+  This can cause accidental mixing between the models and their actual name. 
+  The s and n sized model names were switched so incorrect data was shown
+"""
+
 ##Validate Your Model(s) on testing data
 
 # List of model paths (update with yours)
