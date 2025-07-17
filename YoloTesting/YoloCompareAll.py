@@ -17,8 +17,14 @@ New Merged and New Nick uses 960 resolution for all models including m sized, bu
     for m models to alleviate memory.
 
 All models are sorted by the dataset used and mAP@0.5 in ascending order
-"""
 
+Added Speed Metrics:
+- Preprocess: Image preprocessing time (ms)
+- Inference: Model inference time (ms)
+- Postprocess: Result processing time (ms)
+- Total: Total processing time per image (ms)
+- FPS: Frames processed per second
+"""
 
 # List of model paths to evaluate
 model_paths = [
@@ -33,12 +39,11 @@ model_paths = [
     "oysterTrainedModels/yolo11sNickData960/weights/best.pt"
 ]
 
-# List of datasets (data.yaml files) to evaluate on
+# List of datasets to evaluate on
 data_yaml_files = [
     "REU_Oyster_2024_Improved-2/data.yaml",
     "MergedData/data.yaml"
 ]
-
 
 def evaluate_models(models, data_yaml):
     """Evaluate all models on a single dataset and return results DataFrame."""
@@ -59,18 +64,36 @@ def evaluate_models(models, data_yaml):
         model = YOLO(path)
 
         try:
+            # Run validation and get detailed results
             results = model.val(data=data_yaml, save=False)
+
+            # Extract speed metrics (in milliseconds)
+            preprocess_time = results.speed.get('preprocess', 0)
+            inference_time = results.speed.get('inference', 0)
+            postprocess_time = results.speed.get('postprocess', 0)
+            #Compute total time per image:
+            total_time = preprocess_time + inference_time + postprocess_time
+
+            # Calculate FPS
+            fps = 1000 / total_time if total_time > 0 else 0
+
             results_list.append({
                 "Dataset": dataset_name,
                 "Model": model_name,
                 "Precision": round(results.box.p.mean().item(), 3),
                 "Recall": round(results.box.r.mean().item(), 3),
                 "mAP@0.5": round(results.box.map50.mean().item(), 3),
-                "mAP@0.5:0.95": round(results.box.map.mean().item(), 3)
+                "mAP@0.5:0.95": round(results.box.map.mean().item(), 3),
+                "Preprocess (ms/img)": round(preprocess_time, 2),
+                "Inference (ms/img)": round(inference_time, 2),
+                "Postprocess (ms/img)": round(postprocess_time, 2),
+                "Total (ms/img)": round(total_time, 2),
+                "FPS": round(fps, 1)
             })
             # Print success message with key metrics
             print(
-                f"✅ Validation successful! P: {results_list[-1]['Precision']}, R: {results_list[-1]['Recall']}, mAP50: {results_list[-1]['mAP@0.5']}")
+                f"✅ Validation successful! P: {results_list[-1]['Precision']}, R: {results_list[-1]['Recall']}, "
+                f"mAP50: {results_list[-1]['mAP@0.5']}, FPS: {results_list[-1]['FPS']}")
         except Exception as e:
             print(f"❌ Validation failed for {model_name}: {str(e)}")
 
@@ -118,5 +141,10 @@ if all_results:
     # Print final master table
     print("\n🌟 FINAL COMPARISON ACROSS ALL DATASETS:")
     print(master_df.to_string(index=False))
+
+    # Print speed comparison
+    print("\n🚀 SPEED COMPARISON (sorted by FPS):")
+    speed_df = master_df.sort_values(by="FPS", ascending=False)
+    print(speed_df[["Dataset", "Model", "FPS", "Total (ms/img)", "Inference (ms/img)"]].to_string(index=False))
 else:
     print("\n❌ No results generated (check dataset paths).")
