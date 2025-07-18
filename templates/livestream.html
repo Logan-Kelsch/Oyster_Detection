@@ -339,17 +339,6 @@
     let processingStart = 0;
     let processingTimes = [];
 
-    let processFrameId = 0;
-    let lastDetections = [];
-    const modelFps = 5.0;
-    let videoFps = 30, skipInterval = 1;
-
-    // Model & skip settings
-    const modelFps = 5.0;          // match your server-side model_fps
-    let videoFps = 30;             // default until we read actual
-    let skipInterval = 1;
-    let lastDetections = [];
-
     // Camera access and setup
     async function startCamera() {
       try {
@@ -362,12 +351,6 @@
           },
           audio: false
         });
-        // measure actual camera frame rate
-        const track = stream.getVideoTracks()[0];
-        const settings = track.getSettings();
-        videoFps = settings.frameRate || 30;
-        skipInterval = Math.max(1, Math.round(videoFps / modelFps));
-
 
         // Set video source
         video.srcObject = stream;
@@ -406,7 +389,7 @@
 
     // Handle camera errors
     function handleCameraError(err) {
-      let message = `Error accessing camera: ${err.name}`;
+      let message = Error accessing camera: ${err.name};
 
       if (err.name === 'NotAllowedError') {
         message += ' - Please allow camera access in your browser settings';
@@ -443,40 +426,45 @@
     }
 
     // Process each video frame
-     async function processFrame() {
-       // draw current video frame
-       ctx.clearRect(0, 0, canvas.width, canvas.height);
-       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    async function processFrame() {
+      const startTime = performance.now();
 
-       // always send every frame for detection
-       let detections = [];
-       try {
-         const blob = await new Promise(r => canvas.toBlob(r, 'image/jpeg', 0.85));
-         const form = new FormData();
-         form.append('frame', blob, 'frame.jpg');
-         const resp = await fetch('/annotate_frame', { method: 'POST', body: form });
-         detections = await resp.json();
-       } catch (err) {
-         console.warn('Detect error', err);
-       }
+      // Draw video frame to canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      // only update & redraw overlay every skipInterval frames
-      if (processFrameId % skipInterval === 0) {
-        lastDetections = detections;
-      }
-      drawDetections(lastDetections);
+      // Capture frame as blob and send for detection
+      try {
+        const blob = await new Promise((resolve) => {
+          canvas.toBlob(resolve, 'image/jpeg', 0.85);
+        });
 
-       // update detection list only when overlay actually updates
-      updateDetections(detections);
-      if (processFrameId % skipInterval === 0) {
-        updateDetections(lastDetections);
-      }
+        const formData = new FormData();
+        formData.append('frame', blob, 'frame.jpg');
+
+        // Send frame to server for detection
+        processingStart = performance.now();
+        const response = await fetch('/annotate_frame', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error(Server error: ${response.status});
+        }
+
+        const detections = await response.json();
+        const processingTime = performance.now() - processingStart;
+
+        // Update UI with detections
+        updateDetections(detections);
+        drawDetections(detections);
 
         // Update performance metrics
         updatePerformanceMetrics(processingTime);
       } catch (err) {
         console.error('Processing error:', err);
-        errorMsg.textContent = `Detection error: ${err.message}`;
+        errorMsg.textContent = Detection error: ${err.message};
         errorMsg.style.display = 'block';
       }
 
@@ -493,8 +481,7 @@
         lastTimestamp = now;
       }
 
-      // Continue processing frames bruh
-      processFrameId++;
+      // Continue processing frames
       animationId = requestAnimationFrame(processFrame);
     }
 
@@ -525,7 +512,7 @@
       // Create detection items
       let html = '';
       for (const [label, data] of Object.entries(detectionGroups)) {
-        html += `
+        html +=
           <div class="detection-item">
             <span class="detection-label">${label}</span>
             <div>
@@ -533,7 +520,7 @@
               <span class="detection-confidence">${Math.round(data.maxConfidence * 100)}%</span>
             </div>
           </div>
-        `;
+        ;
       }
 
       detectionList.innerHTML = html;
@@ -557,7 +544,7 @@
 
         // Draw label background
         overlayCtx.fillStyle = 'rgba(52, 152, 219, 0.7)';
-        const text = `${label} ${Math.round(conf * 100)}%`;
+        const text = ${label} ${Math.round(conf * 100)}%;
         const textWidth = overlayCtx.measureText(text).width;
         overlayCtx.fillRect(x1 - 1, y1 - 20, textWidth + 10, 20);
 
