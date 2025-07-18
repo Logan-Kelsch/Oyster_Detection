@@ -676,7 +676,7 @@
         "kind": 2,
         "importPath": "anno_liv",
         "description": "anno_liv",
-        "peekOfCode": "def detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]\n            conf = float(box.conf)",
+        "peekOfCode": "def detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]\n            conf  = float(box.conf)",
         "detail": "anno_liv",
         "documentation": {}
     },
@@ -685,7 +685,16 @@
         "kind": 5,
         "importPath": "anno_liv",
         "description": "anno_liv",
-        "peekOfCode": "model = YOLO(\"active_model/best.pt\")  # Load YOLO once\ndef detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]",
+        "peekOfCode": "model = YOLO(\"active_model/best.pt\")\nmodel_fps = 5.0    # you can expose this via an endpoint if you prefer\ndef detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])",
+        "detail": "anno_liv",
+        "documentation": {}
+    },
+    {
+        "label": "model_fps",
+        "kind": 5,
+        "importPath": "anno_liv",
+        "description": "anno_liv",
+        "peekOfCode": "model_fps = 5.0    # you can expose this via an endpoint if you prefer\ndef detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]",
         "detail": "anno_liv",
         "documentation": {}
     },
