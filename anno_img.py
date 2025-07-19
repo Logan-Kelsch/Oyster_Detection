@@ -5,7 +5,7 @@ import numpy as np
 from ultralytics import YOLO
 from io import BytesIO
 
-model = YOLO('active_model/best.pt')  # Load once
+model = YOLO('active_model/bestSmall.pt')  # Load once
 
 ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'bmp'}
 

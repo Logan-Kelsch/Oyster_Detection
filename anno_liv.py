@@ -4,7 +4,7 @@ import numpy as np
 from ultralytics import YOLO
 import base64
 
-model = YOLO("active_model/best.pt")  # Load YOLO once
+model = YOLO("active_model/bestNano.pt")  # Load YOLO once
 def detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):
     nparr = np.frombuffer(frame_bytes, np.uint8)
     frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)

@@ -8,7 +8,7 @@ from io import BytesIO
 import tempfile
 
 # load once
-model = YOLO('active_model/best.pt')
+model = YOLO('active_model/bestSmall.pt')
 model_fps = 5.0
 
 # precompute a distinct color for each class
