@@ -9,6 +9,7 @@ from werkzeug.utils import secure_filename
 import anno_img
 import anno_liv
 from flask import request, jsonify
+from waitress import serve
 
 
 app = Flask(__name__)
@@ -96,4 +97,4 @@ def annotate_frame():
     return jsonify(detections)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    serve(app, host="0.0.0.0", port=5000)

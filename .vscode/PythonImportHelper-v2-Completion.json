@@ -99,6 +99,30 @@
         "documentation": {}
     },
     {
+        "label": "PCA",
+        "importPath": "sklearn.decomposition",
+        "description": "sklearn.decomposition",
+        "isExtraImport": true,
+        "detail": "sklearn.decomposition",
+        "documentation": {}
+    },
+    {
+        "label": "PCA",
+        "importPath": "sklearn.decomposition",
+        "description": "sklearn.decomposition",
+        "isExtraImport": true,
+        "detail": "sklearn.decomposition",
+        "documentation": {}
+    },
+    {
+        "label": "StandardScaler",
+        "importPath": "sklearn.preprocessing",
+        "description": "sklearn.preprocessing",
+        "isExtraImport": true,
+        "detail": "sklearn.preprocessing",
+        "documentation": {}
+    },
+    {
         "label": "cv2",
         "kind": 6,
         "isExtraImport": true,
@@ -510,6 +534,249 @@
         "documentation": {}
     },
     {
+        "label": "csv_file_path",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "csv_file_path = r'evaluation_results\\model_comparison_20250717_001353.csv'\n# 1) Load CSV\ndf = pd.read_csv(csv_file_path)\n# 2) Metrics of interest\nmetrics = ['mAP@0.5:0.95','mAP@0.5','Precision','Recall']\nfor m in metrics:\n    df[m] = pd.to_numeric(df[m], errors='coerce')\n# 3) Pivot into one row per (Model), one column per (Dataset,Metric)\npivot = df.pivot(index='Model', columns='Dataset', values=metrics)\npivot.columns = [f\"{metric}_{ds}\" for metric, ds in pivot.columns]",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "df",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "df = pd.read_csv(csv_file_path)\n# 2) Metrics of interest\nmetrics = ['mAP@0.5:0.95','mAP@0.5','Precision','Recall']\nfor m in metrics:\n    df[m] = pd.to_numeric(df[m], errors='coerce')\n# 3) Pivot into one row per (Model), one column per (Dataset,Metric)\npivot = df.pivot(index='Model', columns='Dataset', values=metrics)\npivot.columns = [f\"{metric}_{ds}\" for metric, ds in pivot.columns]\npivot = pivot.dropna()\n# 4) Build the feature matrix",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "metrics",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "metrics = ['mAP@0.5:0.95','mAP@0.5','Precision','Recall']\nfor m in metrics:\n    df[m] = pd.to_numeric(df[m], errors='coerce')\n# 3) Pivot into one row per (Model), one column per (Dataset,Metric)\npivot = df.pivot(index='Model', columns='Dataset', values=metrics)\npivot.columns = [f\"{metric}_{ds}\" for metric, ds in pivot.columns]\npivot = pivot.dropna()\n# 4) Build the feature matrix\nX = pivot.values\nmodels = pivot.index.tolist()",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "pivot",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "pivot = df.pivot(index='Model', columns='Dataset', values=metrics)\npivot.columns = [f\"{metric}_{ds}\" for metric, ds in pivot.columns]\npivot = pivot.dropna()\n# 4) Build the feature matrix\nX = pivot.values\nmodels = pivot.index.tolist()\n# 5) Standardize features\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "pivot.columns",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "pivot.columns = [f\"{metric}_{ds}\" for metric, ds in pivot.columns]\npivot = pivot.dropna()\n# 4) Build the feature matrix\nX = pivot.values\nmodels = pivot.index.tolist()\n# 5) Standardize features\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)\npca = PCA(n_components=2)",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "pivot",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "pivot = pivot.dropna()\n# 4) Build the feature matrix\nX = pivot.values\nmodels = pivot.index.tolist()\n# 5) Standardize features\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)\npca = PCA(n_components=2)\nembedding = pca.fit_transform(X_scaled)",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "X",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "X = pivot.values\nmodels = pivot.index.tolist()\n# 5) Standardize features\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)\npca = PCA(n_components=2)\nembedding = pca.fit_transform(X_scaled)\n# 7) Define and project the “ideal” vector\nideal_raw    = np.ones_like(X[0])",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "models",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "models = pivot.index.tolist()\n# 5) Standardize features\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)\npca = PCA(n_components=2)\nembedding = pca.fit_transform(X_scaled)\n# 7) Define and project the “ideal” vector\nideal_raw    = np.ones_like(X[0])\nideal_scaled = scaler.transform(ideal_raw.reshape(1, -1))",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "scaler",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "scaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)\npca = PCA(n_components=2)\nembedding = pca.fit_transform(X_scaled)\n# 7) Define and project the “ideal” vector\nideal_raw    = np.ones_like(X[0])\nideal_scaled = scaler.transform(ideal_raw.reshape(1, -1))\nideal_emb    = pca.transform(ideal_scaled)[0]\n# 8) Compute distances to ideal",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "X_scaled",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "X_scaled = scaler.fit_transform(X)\n# 6) Run PCA (2 components)\npca = PCA(n_components=2)\nembedding = pca.fit_transform(X_scaled)\n# 7) Define and project the “ideal” vector\nideal_raw    = np.ones_like(X[0])\nideal_scaled = scaler.transform(ideal_raw.reshape(1, -1))\nideal_emb    = pca.transform(ideal_scaled)[0]\n# 8) Compute distances to ideal\ndists = np.linalg.norm(embedding - ideal_emb, axis=1)",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "pca",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "pca = PCA(n_components=2)\nembedding = pca.fit_transform(X_scaled)\n# 7) Define and project the “ideal” vector\nideal_raw    = np.ones_like(X[0])\nideal_scaled = scaler.transform(ideal_raw.reshape(1, -1))\nideal_emb    = pca.transform(ideal_scaled)[0]\n# 8) Compute distances to ideal\ndists = np.linalg.norm(embedding - ideal_emb, axis=1)\n# 9) Assemble & rank\nout = pd.DataFrame({",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "embedding",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "embedding = pca.fit_transform(X_scaled)\n# 7) Define and project the “ideal” vector\nideal_raw    = np.ones_like(X[0])\nideal_scaled = scaler.transform(ideal_raw.reshape(1, -1))\nideal_emb    = pca.transform(ideal_scaled)[0]\n# 8) Compute distances to ideal\ndists = np.linalg.norm(embedding - ideal_emb, axis=1)\n# 9) Assemble & rank\nout = pd.DataFrame({\n    'Model': models,",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "ideal_scaled",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "ideal_scaled = scaler.transform(ideal_raw.reshape(1, -1))\nideal_emb    = pca.transform(ideal_scaled)[0]\n# 8) Compute distances to ideal\ndists = np.linalg.norm(embedding - ideal_emb, axis=1)\n# 9) Assemble & rank\nout = pd.DataFrame({\n    'Model': models,\n    'PC1': embedding[:,0],\n    'PC2': embedding[:,1],\n    'Distance_to_Ideal': dists",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "dists",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "dists = np.linalg.norm(embedding - ideal_emb, axis=1)\n# 9) Assemble & rank\nout = pd.DataFrame({\n    'Model': models,\n    'PC1': embedding[:,0],\n    'PC2': embedding[:,1],\n    'Distance_to_Ideal': dists\n}).sort_values('Distance_to_Ideal')\n# 10) Show ranking\nprint(\"\\nModels ranked by closeness to the ideal (perfect) metrics:\\n\")",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "out",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "out = pd.DataFrame({\n    'Model': models,\n    'PC1': embedding[:,0],\n    'PC2': embedding[:,1],\n    'Distance_to_Ideal': dists\n}).sort_values('Distance_to_Ideal')\n# 10) Show ranking\nprint(\"\\nModels ranked by closeness to the ideal (perfect) metrics:\\n\")\nprint(out.to_string(index=False, float_format=\"%.4f\"))\n# 11) Save to CSV",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "output_path",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloEmb",
+        "description": "YoloTesting.YoloEmb",
+        "peekOfCode": "output_path = os.path.splitext(csv_file_path)[0] + '_PCA_distances.csv'\nout.to_csv(output_path, index=False, float_format=\"%.4f\")\nprint(f\"\\n✅ Ranking also saved to: {output_path}\")",
+        "detail": "YoloTesting.YoloEmb",
+        "documentation": {}
+    },
+    {
+        "label": "csv_file_path",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "csv_file_path = r'evaluation_results\\model_comparison_20250717_001353.csv'\n# 1) Load CSV\ntry:\n    df = pd.read_csv(csv_file_path)\nexcept FileNotFoundError:\n    print(f\"Error: File '{csv_file_path}' not found.\"); exit()\nexcept Exception as e:\n    print(f\"Error loading CSV file: {e}\"); exit()\n# 2) Metrics of interest\nrequired_metrics = ['mAP@0.5:0.95','mAP@0.5','Precision','Recall']",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "required_metrics",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "required_metrics = ['mAP@0.5:0.95','mAP@0.5','Precision','Recall']\nfor col in required_metrics:\n    df[col] = pd.to_numeric(df[col], errors='coerce')\n# 3) Restrict to models present in all datasets\ndatasets = df['Dataset'].unique()\nmodels_per_dataset = [set(df[df['Dataset']==d]['Model']) for d in datasets]\nvalid_models = sorted(set.intersection(*models_per_dataset))\n# 4) Compute per‑model averages\nrows = []\nfor m in valid_models:",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "datasets",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "datasets = df['Dataset'].unique()\nmodels_per_dataset = [set(df[df['Dataset']==d]['Model']) for d in datasets]\nvalid_models = sorted(set.intersection(*models_per_dataset))\n# 4) Compute per‑model averages\nrows = []\nfor m in valid_models:\n    sub = df[df['Model']==m]\n    avg_metrics = {\n        metric: sub.groupby('Dataset')[metric].first().mean()\n        for metric in required_metrics",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "models_per_dataset",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "models_per_dataset = [set(df[df['Dataset']==d]['Model']) for d in datasets]\nvalid_models = sorted(set.intersection(*models_per_dataset))\n# 4) Compute per‑model averages\nrows = []\nfor m in valid_models:\n    sub = df[df['Model']==m]\n    avg_metrics = {\n        metric: sub.groupby('Dataset')[metric].first().mean()\n        for metric in required_metrics\n    }",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "valid_models",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "valid_models = sorted(set.intersection(*models_per_dataset))\n# 4) Compute per‑model averages\nrows = []\nfor m in valid_models:\n    sub = df[df['Model']==m]\n    avg_metrics = {\n        metric: sub.groupby('Dataset')[metric].first().mean()\n        for metric in required_metrics\n    }\n    avg_metrics['Model'] = m",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "rows",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "rows = []\nfor m in valid_models:\n    sub = df[df['Model']==m]\n    avg_metrics = {\n        metric: sub.groupby('Dataset')[metric].first().mean()\n        for metric in required_metrics\n    }\n    avg_metrics['Model'] = m\n    rows.append(avg_metrics)\nagg_df = pd.DataFrame(rows).set_index('Model')",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "agg_df",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "agg_df = pd.DataFrame(rows).set_index('Model')\n# 5) Run PCA → PC1\npca = PCA(n_components=1)\nagg_df['PC1_score'] = pca.fit_transform(agg_df[required_metrics])\n# 6) Rank by PC1 (descending)\nagg_df = agg_df.sort_values('PC1_score', ascending=False)\n# 7) Show results\nprint(\"Model ranking by first principal component (PC1):\\n\")\nprint(agg_df[['PC1_score'] + required_metrics].to_string(float_format=\"%.4f\"))\n# 8) Save to CSV",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "pca",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "pca = PCA(n_components=1)\nagg_df['PC1_score'] = pca.fit_transform(agg_df[required_metrics])\n# 6) Rank by PC1 (descending)\nagg_df = agg_df.sort_values('PC1_score', ascending=False)\n# 7) Show results\nprint(\"Model ranking by first principal component (PC1):\\n\")\nprint(agg_df[['PC1_score'] + required_metrics].to_string(float_format=\"%.4f\"))\n# 8) Save to CSV\noutput_path = os.path.splitext(csv_file_path)[0] + '_PC1_ranking.csv'\nagg_df[['PC1_score'] + required_metrics].to_csv(output_path, float_format=\"%.4f\")",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "agg_df['PC1_score']",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "agg_df['PC1_score'] = pca.fit_transform(agg_df[required_metrics])\n# 6) Rank by PC1 (descending)\nagg_df = agg_df.sort_values('PC1_score', ascending=False)\n# 7) Show results\nprint(\"Model ranking by first principal component (PC1):\\n\")\nprint(agg_df[['PC1_score'] + required_metrics].to_string(float_format=\"%.4f\"))\n# 8) Save to CSV\noutput_path = os.path.splitext(csv_file_path)[0] + '_PC1_ranking.csv'\nagg_df[['PC1_score'] + required_metrics].to_csv(output_path, float_format=\"%.4f\")\nprint(f\"\\n✅ Ranking saved to: {output_path}\")",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "agg_df",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "agg_df = agg_df.sort_values('PC1_score', ascending=False)\n# 7) Show results\nprint(\"Model ranking by first principal component (PC1):\\n\")\nprint(agg_df[['PC1_score'] + required_metrics].to_string(float_format=\"%.4f\"))\n# 8) Save to CSV\noutput_path = os.path.splitext(csv_file_path)[0] + '_PC1_ranking.csv'\nagg_df[['PC1_score'] + required_metrics].to_csv(output_path, float_format=\"%.4f\")\nprint(f\"\\n✅ Ranking saved to: {output_path}\")",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
+        "label": "output_path",
+        "kind": 5,
+        "importPath": "YoloTesting.YoloPCA",
+        "description": "YoloTesting.YoloPCA",
+        "peekOfCode": "output_path = os.path.splitext(csv_file_path)[0] + '_PC1_ranking.csv'\nagg_df[['PC1_score'] + required_metrics].to_csv(output_path, float_format=\"%.4f\")\nprint(f\"\\n✅ Ranking saved to: {output_path}\")",
+        "detail": "YoloTesting.YoloPCA",
+        "documentation": {}
+    },
+    {
         "label": "TRAIN_CONFIG",
         "kind": 5,
         "importPath": "YoloTesting.YoloTrainAll",
@@ -604,7 +871,7 @@
         "kind": 5,
         "importPath": "anno_img",
         "description": "anno_img",
-        "peekOfCode": "model = YOLO('active_model/best.pt')  # Load once\nALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'bmp'}\n# Choose your colors and font\nBOX_COLOR = (0, 0, 255)  # Red (B, G, R)\nTEXT_COLOR = (255, 255, 255)  # White\nFONT = cv2.FONT_HERSHEY_COMPLEX  # Choose from list below\nFONT_SCALE = 0.6\nTHICKNESS = 2\nTEXT_BG_COLOR = (0, 0, 255)  # Background color for text, optional\nimport random",
+        "peekOfCode": "model = YOLO('active_model/bestSmall.pt')  # Load once\nALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'bmp'}\n# Choose your colors and font\nBOX_COLOR = (0, 0, 255)  # Red (B, G, R)\nTEXT_COLOR = (255, 255, 255)  # White\nFONT = cv2.FONT_HERSHEY_COMPLEX  # Choose from list below\nFONT_SCALE = 0.6\nTHICKNESS = 2\nTEXT_BG_COLOR = (0, 0, 255)  # Background color for text, optional\nimport random",
         "detail": "anno_img",
         "documentation": {}
     },
@@ -676,7 +943,7 @@
         "kind": 2,
         "importPath": "anno_liv",
         "description": "anno_liv",
-        "peekOfCode": "def detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]\n            conf  = float(box.conf)",
+        "peekOfCode": "def detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]\n            conf = float(box.conf)",
         "detail": "anno_liv",
         "documentation": {}
     },
@@ -685,16 +952,7 @@
         "kind": 5,
         "importPath": "anno_liv",
         "description": "anno_liv",
-        "peekOfCode": "model = YOLO(\"active_model/best.pt\")\nmodel_fps = 5.0    # you can expose this via an endpoint if you prefer\ndef detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])",
-        "detail": "anno_liv",
-        "documentation": {}
-    },
-    {
-        "label": "model_fps",
-        "kind": 5,
-        "importPath": "anno_liv",
-        "description": "anno_liv",
-        "peekOfCode": "model_fps = 5.0    # you can expose this via an endpoint if you prefer\ndef detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]",
+        "peekOfCode": "model = YOLO(\"active_model/bestNano.pt\")  # Load YOLO once\ndef detect_objects_from_bytes(frame_bytes: bytes, conf_threshold=0.75):\n    nparr = np.frombuffer(frame_bytes, np.uint8)\n    frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)\n    results = model(frame)\n    detections = []\n    for box in results[0].boxes:\n        if float(box.conf) >= conf_threshold:\n            x1, y1, x2, y2 = map(int, box.xyxy[0])\n            label = model.names[int(box.cls[0])]",
         "detail": "anno_liv",
         "documentation": {}
     },
@@ -730,7 +988,7 @@
         "kind": 5,
         "importPath": "anno_vid",
         "description": "anno_vid",
-        "peekOfCode": "model = YOLO('active_model/best.pt')\nmodel_fps = 5.0\n# precompute a distinct color for each class\ndef make_color_palette(n):\n    \"\"\"Generate n visually distinct BGR colors via HSV spacing.\"\"\"\n    palette = []\n    for i in range(n):\n        hue = int(179 * i / n)\n        hsv = np.uint8([[[hue, 255, 255]]])           # full saturation/value\n        bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)[0][0]",
+        "peekOfCode": "model = YOLO('active_model/bestSmall.pt')\nmodel_fps = 5.0\n# precompute a distinct color for each class\ndef make_color_palette(n):\n    \"\"\"Generate n visually distinct BGR colors via HSV spacing.\"\"\"\n    palette = []\n    for i in range(n):\n        hue = int(179 * i / n)\n        hsv = np.uint8([[[hue, 255, 255]]])           # full saturation/value\n        bgr = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)[0][0]",
         "detail": "anno_vid",
         "documentation": {}
     },
