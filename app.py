@@ -1,5 +1,7 @@
 # app.py
 import os
+import socket
+
 from flask import (
     Flask, render_template, request,
     redirect, url_for, send_file, Response
@@ -97,4 +99,23 @@ def annotate_frame():
     return jsonify(detections)
 
 if __name__ == "__main__":
+    #New line to run client to server side connection
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    print(f"Project root is: {PROJECT_ROOT}")
+    #Old run line to run on one computer
+    #app.run(debug=True)
+ # Get local IP address
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+    except Exception:
+        local_ip = '127.0.0.1'
+    finally:
+        s.close()
+
+    print(f"\n➡️  Listening on all interfaces (host=0.0.0.0) port=5000")
+    print(f"🔗  Access this app from another device on your LAN at:")
+    print(f"   http://{local_ip}:5000\n")
+
     serve(app, host="0.0.0.0", port=5000)

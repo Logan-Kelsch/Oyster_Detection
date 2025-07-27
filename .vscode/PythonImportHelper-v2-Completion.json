@@ -1,5 +1,77 @@
 [
     {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
         "label": "pandas",
         "kind": 6,
         "isExtraImport": true,
@@ -24,70 +96,6 @@
         "importPath": "os",
         "description": "os",
         "detail": "os",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
         "documentation": {}
     },
     {
@@ -172,6 +180,15 @@
         "importPath": "tempfile",
         "description": "tempfile",
         "detail": "tempfile",
+        "documentation": {}
+    },
+    {
+        "label": "socket",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "socket",
+        "description": "socket",
+        "detail": "socket",
         "documentation": {}
     },
     {
@@ -270,6 +287,32 @@
         "importPath": "anno_liv",
         "description": "anno_liv",
         "detail": "anno_liv",
+        "documentation": {}
+    },
+    {
+        "label": "serve",
+        "importPath": "waitress",
+        "description": "waitress",
+        "isExtraImport": true,
+        "detail": "waitress",
+        "documentation": {}
+    },
+    {
+        "label": "tfjs_model",
+        "kind": 5,
+        "importPath": "YoloTesting.TFJS_test",
+        "description": "YoloTesting.TFJS_test",
+        "peekOfCode": "tfjs_model = YOLO(\"oysterTrainedModels/yolo11nOysterNick/weights/best_web_model\", task=\"detect\")\n# Run inference\nresults = tfjs_model(\"https://ultralytics.com/images/bus.jpg\")",
+        "detail": "YoloTesting.TFJS_test",
+        "documentation": {}
+    },
+    {
+        "label": "results",
+        "kind": 5,
+        "importPath": "YoloTesting.TFJS_test",
+        "description": "YoloTesting.TFJS_test",
+        "peekOfCode": "results = tfjs_model(\"https://ultralytics.com/images/bus.jpg\")",
+        "detail": "YoloTesting.TFJS_test",
         "documentation": {}
     },
     {
