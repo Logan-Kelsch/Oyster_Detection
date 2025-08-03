@@ -101,13 +101,12 @@ const App = () => {
 
             </div>
 
+            <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
             <DownloadButton
                 annotatedSrc={annotatedSrc}
                 canvasRef={canvasRef}
                 recordedBlob={recordedBlob}
             />
-
-            <ButtonHandler imageRef={imageRef} cameraRef={cameraRef} videoRef={videoRef} />
         </div>
     );
 };

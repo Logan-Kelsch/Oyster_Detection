@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/yolov8-tfjs-master.iml" filepath="$PROJECT_DIR$/.idea/yolov8-tfjs-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Oyster_Detection.iml" filepath="$PROJECT_DIR$/.idea/Oyster_Detection.iml" />
     </modules>
   </component>
 </project>
