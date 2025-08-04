@@ -1,11 +1,19 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  build: {
-    chunkSizeWarningLimit: 2000, // handle warning on vendor.js bundle size
+  server: {
+    watch: {
+      ignored: [
+        // Always use recursive glob patterns to match everything under these folders
+        "**/ModelResearch/**",
+        "**/ForHamid/**",
+      ]
+    }
   },
   base: "/yolov8-tfjs/",
+  build: {
+    chunkSizeWarningLimit: 2000
+  }
 });
