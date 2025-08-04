@@ -1,3 +1,6 @@
+import multiprocessing
+from multiprocessing import freeze_support
+
 from ultralytics import YOLO
 import pandas as pd
 import os
@@ -26,26 +29,8 @@ Added Speed Metrics:
 - FPS: Frames processed per second
 """
 
-# List of model paths to evaluate
-model_paths = [
-    "oysterTrainedModels/yolo11mOysterNick/weights/best.pt",  # OldNick
-    "oysterTrainedModels/yolo11nOysterNick/weights/best.pt",
-    "oysterTrainedModels/yolo11sOysterNick/weights/best.pt",
-    "oysterTrainedModels/yolo11mMergedData960/weights/best.pt",  # NewMerged
-    "oysterTrainedModels/yolo11nMergedData960/weights/best.pt",
-    "oysterTrainedModels/yolo11sMergedData960/weights/best.pt",
-    "oysterTrainedModels/yolo11mNickData960/weights/best.pt",  # NewNick
-    "oysterTrainedModels/yolo11nNickData960/weights/best.pt",
-    "oysterTrainedModels/yolo11sNickData960/weights/best.pt"
-]
 
-# List of datasets to evaluate on
-data_yaml_files = [
-    "REU_Oyster_2024_Improved-2/data.yaml",
-    "MergedData/data.yaml"
-]
-
-def evaluate_models(models, data_yaml):
+def evaluate_models(models, data_yaml, deviceChoice='cuda'):
     """Evaluate all models on a single dataset and return results DataFrame."""
     results_list = []
     dataset_name = os.path.basename(os.path.dirname(data_yaml))
@@ -62,10 +47,10 @@ def evaluate_models(models, data_yaml):
 
         print(f"\nValidating: {model_name} ({path})")
         model = YOLO(path)
-
+        model = model.to(deviceChoice)
         try:
             # Run validation and get detailed results
-            results = model.val(data=data_yaml, save=False)
+            results = model.val(data=data_yaml, save=False,device=deviceChoice)
 
             # Extract speed metrics (in milliseconds)
             preprocess_time = results.speed.get('preprocess', 0)
@@ -99,52 +84,83 @@ def evaluate_models(models, data_yaml):
 
     return pd.DataFrame(results_list)
 
+def main():
+
+    # List of model paths to evaluate
+    model_paths = [
+    "oysterTrainedModels/yolo11mMergedData960/weights/best.pt",  # NewMerged
+    "oysterTrainedModels/yolo11nMergedData960/weights/best.pt",
+    "oysterTrainedModels/yolo11sMergedData960/weights/best.pt",
+    "oysterTrainedModels/yolo11mNickData960/weights/best.pt",  # NewNick
+    "oysterTrainedModels/yolo11nNickData960/weights/best.pt",
+    "oysterTrainedModels/yolo11sNickData960/weights/best.pt",
+    "oysterTrainedModels/yolo8mMerged/weights/best.pt",  # Yolo8Merged
+    "oysterTrainedModels/yolo8sMerged/weights/best.pt",
+    "oysterTrainedModels/yolo8nMerged/weights/best.pt",
+    "oysterTrainedModels/yolo8mNick/weights/best.pt",  # Yolo8Nick
+    "oysterTrainedModels/yolo8sNick/weights/best.pt",
+    "oysterTrainedModels/yolo8nNick/weights/best.pt"
+
+]
+
+    # List of datasets to evaluate on
+    data_yaml_files = [
+    "REU_Oyster_2024_Improved-2/data.yaml",
+    "MergedData/data.yaml"
+]
 
 # Process all datasets
-all_results = []
-dataset_results = []  # Store results for each dataset
+    all_results = []
+    dataset_results = []  # Store results for each dataset
 
-for data_yaml in data_yaml_files:
-    if not os.path.exists(data_yaml):
-        print(f"⚠️ Dataset not found: {data_yaml}")
-        continue
+    for data_yaml in data_yaml_files:
+        if not os.path.exists(data_yaml):
+            print(f"⚠️ Dataset not found: {data_yaml}")
+            continue
 
-    df = evaluate_models(model_paths, data_yaml)
-    all_results.append(df)
+        df = evaluate_models(model_paths, data_yaml)
+        all_results.append(df)
 
-    # Store dataset name and sorted results for later printing
-    dataset_name = os.path.basename(os.path.dirname(data_yaml))
-    sorted_df = df.sort_values(by="mAP@0.5", ascending=False)
-    dataset_results.append((dataset_name, sorted_df))
+        # Store dataset name and sorted results for later printing
+        dataset_name = os.path.basename(os.path.dirname(data_yaml))
+        sorted_df = df.sort_values(by="mAP@0.5:0.95", ascending=False)
+        dataset_results.append((dataset_name, sorted_df))
 
 # Print all dataset results at the end
-for dataset_name, sorted_df in dataset_results:
-    print(f"\n📊 RESULTS FOR {dataset_name} (sorted by mAP@0.5):")
-    print(sorted_df.to_string(index=False))
-    print("-" * 80)
+    for dataset_name, sorted_df in dataset_results:
+        print(f"\n📊 RESULTS FOR {dataset_name} (sorted by mAP@0.5:0.95):")
+        print(sorted_df.to_string(index=False))
+        print("-" * 80)
 
 # Combine and save all results to single file
-if all_results:
-    master_df = pd.concat(all_results).sort_values(
-        by=["Dataset", "mAP@0.5"],
-        ascending=[True, False]
+    if all_results:
+        master_df = pd.concat(all_results).sort_values(
+         by=["Dataset", "mAP@0.5:0.95"],
+            ascending=[True, False]
     )
 
     # Create timestamped filename in dedicated folder
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    csv_filename = os.path.join(RESULTS_DIR, f"model_comparison_{timestamp}.csv")
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        csv_filename = os.path.join(RESULTS_DIR, f"model_comparison_{timestamp}.csv")
 
-    # Save to CSV
-    master_df.to_csv(csv_filename, index=False)
-    print(f"\n🔥 All results saved to: {os.path.abspath(csv_filename)}")
+        # Save to CSV
+        master_df.to_csv(csv_filename, index=False)
+        print(f"\n🔥 All results saved to: {os.path.abspath(csv_filename)}")
 
-    # Print final master table
-    print("\n🌟 FINAL COMPARISON ACROSS ALL DATASETS:")
-    print(master_df.to_string(index=False))
+        # Print final master table
+        print("\n🌟 FINAL COMPARISON ACROSS ALL DATASETS:")
+        print(master_df.to_string(index=False))
 
-    # Print speed comparison
-    print("\n🚀 SPEED COMPARISON (sorted by FPS):")
-    speed_df = master_df.sort_values(by="FPS", ascending=False)
-    print(speed_df[["Dataset", "Model", "FPS", "Total (ms/img)", "Inference (ms/img)"]].to_string(index=False))
-else:
-    print("\n❌ No results generated (check dataset paths).")
+        # Print speed comparison
+        print("\n🚀 SPEED COMPARISON (sorted by FPS):")
+        speed_df = master_df.sort_values(by="FPS", ascending=False)
+        print(speed_df[["Dataset", "Model", "FPS", "Total (ms/img)", "Inference (ms/img)"]].to_string(index=False))
+    else:
+        print("\n❌ No results generated (check dataset paths).")
+
+
+
+if __name__=='__main__':
+    multiprocessing.freeze_support()
+    main()
+
