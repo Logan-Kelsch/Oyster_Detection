@@ -99,7 +99,10 @@ def main():
     "oysterTrainedModels/yolo8nMerged/weights/best.pt",
     "oysterTrainedModels/yolo8mNick/weights/best.pt",  # Yolo8Nick
     "oysterTrainedModels/yolo8sNick/weights/best.pt",
-    "oysterTrainedModels/yolo8nNick/weights/best.pt"
+    "oysterTrainedModels/yolo8nNick/weights/best.pt",
+    "oysterTrainedModels/yolo8nMerged8Batch/weights/best.pt", #yolotest
+    "oysterTrainedModels/yolo8nMerged16Batch/weights/best.pt",
+    "oysterTrainedModels/yolo8sMerged8Batch/weights/best.pt"
 
 ]
 
